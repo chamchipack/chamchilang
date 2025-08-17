@@ -5,9 +5,16 @@ import { Bookmark, Share2, Volume2, ChevronRight } from 'lucide-react-native';
 import SectionTitle from './Sectiontitle';
 import Badge from './Badge';
 import VerbLogicChips from './VerbLogicChips';
-import { nagareru, VerbWord } from '../../../../config/type/language';
+import {
+  nagareru,
+  atsui,
+  AdjWord,
+  VerbWord,
+  Word,
+} from '../../../../config/type/language';
+import AdjectiveLogicChips from './AdjectiveLogicChips';
 
-export default function Information({ data = nagareru }: { data?: VerbWord }) {
+export default function Information({ data = atsui }: { data?: Word }) {
   return (
     <View style={styles.root}>
       {/* 상단 헤더 카드 */}
@@ -184,7 +191,11 @@ export default function Information({ data = nagareru }: { data?: VerbWord }) {
         </TouchableOpacity>
       </View> */}
 
-      {data.type === 'verb' ? <VerbLogicChips meta={data.meta} /> : null}
+      {data.type === 'verb' ? (
+        <VerbLogicChips meta={data.meta} />
+      ) : data.type === 'adj' ? (
+        <AdjectiveLogicChips meta={data.meta} />
+      ) : null}
     </View>
   );
 }

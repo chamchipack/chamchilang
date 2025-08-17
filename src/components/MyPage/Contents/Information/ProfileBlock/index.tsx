@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { User, LogIn, LogOut } from 'lucide-react-native';
 import { styles } from './style';
+import useGoLogin from './hooks/useGoLogin';
 
 export default function ProfileBlock({
   isLoggedIn,
@@ -14,6 +15,8 @@ export default function ProfileBlock({
   level?: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
   avatarUri?: string;
 }) {
+  const { goLogin } = useGoLogin();
+
   if (!isLoggedIn) {
     return (
       <View style={styles.card}>
@@ -27,7 +30,10 @@ export default function ProfileBlock({
               저장한 단어와 학습 히스토리를 확인해보세요
             </Text>
           </View>
-          <TouchableOpacity style={styles.primaryBtn} activeOpacity={0.85}>
+          <TouchableOpacity
+            style={styles.primaryBtn}
+            activeOpacity={0.85}
+            onPress={goLogin}>
             <LogIn size={18} color="#fff" />
             <Text style={styles.primaryBtnText}>로그인</Text>
           </TouchableOpacity>

@@ -15,7 +15,7 @@ export type MyPageProps = {
 };
 
 export default function MyPage({
-  isLoggedIn = true,
+  isLoggedIn = false,
   nickname = '게스트',
   level = 'N5',
   avatarUri,

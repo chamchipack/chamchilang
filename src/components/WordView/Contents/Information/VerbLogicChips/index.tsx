@@ -2,8 +2,11 @@ import React, { useMemo, useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { styles } from './style';
 import { verbLogic } from '../../../../../config/japanese/transform/verb';
-import { EndingRo } from '../../../../../config/japanese/type';
+import { EndingRoSchema } from '../../../../../config/type/language/atoms/index';
 import SectionTitle from '../Sectiontitle';
+import z from 'zod';
+
+export type EndingRo = z.infer<typeof EndingRoSchema>;
 
 export type VerbMeta = {
   form: 1 | 2 | 3; // 오단/일단/불규칙

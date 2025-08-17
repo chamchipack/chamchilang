@@ -1,37 +1,13 @@
 import { z } from 'zod';
-
-/** ====== Atomic Schemas ====== */
-export const EndingRoSchema = z.enum([
-  'u',
-  'ku',
-  'gu',
-  'su',
-  'mu',
-  'nu',
-  'bu',
-  'tsu',
-  'ru',
-  'suru',
-]);
-
-export const TokenSchema = z.object({
-  jp: z.string(),
-  reading: z.string().optional(),
-});
-
-export const ExampleSchema = z.object({
-  id: z.string(),
-  jp: z.string(),
-  tokens: z.array(TokenSchema), // 예문 토큰(루비용)
-  ko: z.string(),
-  ro: z.string().optional(),
-});
-
-export const SenseSchema = z.object({
-  meaning: z.string(),
-  notes: z.string(),
-  tags: z.array(z.string()).optional(),
-});
+import {
+  ExampleSchema,
+  JLPTSchema,
+  PartOfSpeechSchema,
+  SenseSchema,
+} from './atoms';
+import { VerbWordSchema } from './pos/verb';
+import { AdjWordSchema } from './pos/adj';
+import { NounWordSchema } from './pos/noun';
 
 /** ====== Base Word (공통 필드) ====== */
 export const BaseWordSchema = z.object({
@@ -40,44 +16,14 @@ export const BaseWordSchema = z.object({
   jp: z.string(),
   kana: z.string(),
   ro: z.string(),
-  type: z.enum(['verb', 'adj', 'noun']),
-  jlpt: z.enum(['N1', 'N2', 'N3', 'N4', 'N5']),
+  type: PartOfSpeechSchema,
+  jlpt: JLPTSchema,
   exception: z.boolean().optional(),
   senses: z.array(SenseSchema).optional(),
   examples: z.array(ExampleSchema).optional(),
 });
 
-/** ====== Meta Schemas ====== */
-export const VerbMetaSchema = z.object({
-  form: z.union([z.literal(1), z.literal(2), z.literal(3)]), // 오단/1단/불규칙
-  stem: z.object({ jp: z.string(), ro: z.string() }),
-  ending: z.object({ jp: z.string(), ro: EndingRoSchema }),
-});
-
-export const AdjMetaSchema = z.object({
-  form: z.enum(['i', 'na']), // い형 / な형
-  stem: z.object({ jp: z.string(), ro: z.string() }),
-  ending: z.object({ jp: z.string(), ro: z.string() }),
-});
-
 /** ====== Discriminated Word Schemas ====== */
-export const VerbWordSchema = BaseWordSchema.extend({
-  type: z.literal('verb'),
-  meta: VerbMetaSchema,
-});
-
-export const AdjWordSchema = BaseWordSchema.extend({
-  type: z.literal('adj'),
-  meta: AdjMetaSchema,
-});
-
-export const NounWordSchema = BaseWordSchema.extend({
-  type: z.literal('noun'),
-  // 명사는 meta 없음(선택적으로 undefined 허용)
-  meta: z.undefined().optional(),
-});
-
-/** 단일 Word 스키마 (type으로 분기) */
 export const WordSchema = z.discriminatedUnion('type', [
   VerbWordSchema,
   AdjWordSchema,
@@ -85,13 +31,12 @@ export const WordSchema = z.discriminatedUnion('type', [
 ]);
 
 /** ====== TS Types (선택) ====== */
-export type EndingRo = z.infer<typeof EndingRoSchema>;
 export type Example = z.infer<typeof ExampleSchema>;
-export type VerbMeta = z.infer<typeof VerbMetaSchema>;
-export type AdjMeta = z.infer<typeof AdjMetaSchema>;
+
 export type VerbWord = z.infer<typeof VerbWordSchema>;
 export type AdjWord = z.infer<typeof AdjWordSchema>;
 export type NounWord = z.infer<typeof NounWordSchema>;
+
 export type Word = z.infer<typeof WordSchema>;
 
 /** ====== 샘플 데이터 & 검증 ====== */
@@ -163,7 +108,3 @@ export const atsui: AdjWord = {
     ending: { jp: 'い', ro: 'i' },
   },
 };
-
-// 사용 예: 런타임 검증
-WordSchema.parse(nagareru);
-WordSchema.parse(atsui);

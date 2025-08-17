@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { styles } from './style';
 import { Bookmark, Share2, Volume2, ChevronRight } from 'lucide-react-native';
-import { nagareru, VerbWord } from '../../../../config/japanese/type';
 import SectionTitle from './Sectiontitle';
 import Badge from './Badge';
 import VerbLogicChips from './VerbLogicChips';
+import { nagareru, VerbWord } from '../../../../config/type/language';
 
 export default function Information({ data = nagareru }: { data?: VerbWord }) {
   return (

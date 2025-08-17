@@ -9,6 +9,7 @@ import VocaListScreen from '../screen/VocaListScreen';
 import VocaWordListScreen from '../screen/VocaWordListScreen';
 import BlogListScreen from '../screen/BlogListScreen';
 import BlogViewScreen from '../screen/BlogViewScreen';
+import CreateWordScreen from '../screen/CreateWordScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ export default function StackNavigator() {
       <Stack.Screen name="vocawordlist" component={VocaWordListScreen} />
       <Stack.Screen name="bloglist" component={BlogListScreen} />
       <Stack.Screen name="blogview" component={BlogViewScreen} />
+      <Stack.Screen name="createword" component={CreateWordScreen} />
     </Stack.Navigator>
   );
 }

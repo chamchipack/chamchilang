@@ -37,7 +37,6 @@ export const SenseSchema = z.object({
 export const BaseWordSchema = z.object({
   id: z.string(),
   language: z.literal('japanese'),
-  ko: z.string(),
   jp: z.string(),
   kana: z.string(),
   ro: z.string(),
@@ -100,7 +99,6 @@ export const nagareru: VerbWord = {
   type: 'verb',
   id: '1',
   language: 'japanese',
-  ko: '흐르다',
   jp: '流れる',
   kana: 'ながれる',
   ro: 'nagareru',
@@ -142,7 +140,6 @@ export const atsui: AdjWord = {
   type: 'adj',
   id: '2',
   language: 'japanese',
-  ko: '두껍다',
   jp: '厚い',
   kana: 'あつい',
   ro: 'atsui',

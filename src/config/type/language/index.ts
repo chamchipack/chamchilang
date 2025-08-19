@@ -85,9 +85,9 @@ export const atsui: AdjWord = {
   type: 'adj',
   id: '2',
   language: 'japanese',
-  jp: '厚い',
-  kana: 'あつい',
-  ro: 'atsui',
+  jp: '静かだ',
+  kana: 'しずかだ',
+  ro: 'shizukada',
   jlpt: 'N4',
   senses: [
     {
@@ -103,8 +103,8 @@ export const atsui: AdjWord = {
   ],
   exception: false,
   meta: {
-    form: 'i',
-    stem: { jp: '厚', ro: 'atsu' },
-    ending: { jp: 'い', ro: 'i' },
+    form: 'na',
+    stem: { jp: '静か', ro: 'shizuka' },
+    ending: { jp: 'だ', ro: 'da' },
   },
 };

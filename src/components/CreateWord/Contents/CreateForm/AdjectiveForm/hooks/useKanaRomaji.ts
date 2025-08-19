@@ -1,6 +1,6 @@
 // CreateForm/hooks/useKanaRomaji.ts
 
-import { HIRAGANA_BY_JP } from '../../../../../config/japanese/alphabet/hiragana';
+import { HIRAGANA_BY_JP } from '../../../../../../config/japanese/alphabet/hiragana';
 
 const SMALL = new Set([
   'ゃ',

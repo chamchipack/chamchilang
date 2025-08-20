@@ -16,7 +16,7 @@ import { styles, NAVBAR_HEIGHT } from './style';
 const TABS = [
   { id: 'home', label: '홈', Icon: Home, route: 'home' },
   { id: 'search', label: '검색', Icon: Search, route: 'search' },
-  { id: 'shop', label: '쇼핑', Icon: ShoppingBag, route: 'Shop' },
+  { id: 'sketchbook', label: '쇼핑', Icon: ShoppingBag, route: 'sketchbook' },
   { id: 'vocalist', label: '찜', Icon: Heart, route: 'vocalist' },
   { id: 'mypage', label: '프로필', Icon: User, route: 'mypage' },
 ];

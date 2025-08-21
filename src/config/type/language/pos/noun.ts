@@ -1,8 +1,14 @@
 import z from 'zod';
 import { BaseWordSchema } from '..';
+import { EndingRoSchema } from '../atoms';
+
+export const NounMetaSchema = z.object({
+  isVerbAvailable: z.boolean(),
+  stem: z.object({ jp: z.string(), ro: z.string() }),
+  ending: z.object({ jp: z.string(), ro: EndingRoSchema }),
+});
 
 export const NounWordSchema = BaseWordSchema.extend({
   type: z.literal('noun'),
-  // 명사는 meta 없음(선택적으로 undefined 허용)
-  meta: z.undefined().optional(),
+  meta: NounMetaSchema,
 });

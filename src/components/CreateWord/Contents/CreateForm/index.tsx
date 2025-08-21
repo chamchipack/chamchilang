@@ -5,6 +5,7 @@ import { styles, CHIP_STATES } from './style';
 import { PartOfSpeech } from '../../../../config/type/language/atoms';
 import VerbForm from './VerbForm';
 import AdjectiveForm from './AdjectiveForm';
+import NounForm from './NounForm';
 
 const POS_OPTIONS: { key: PartOfSpeech; label: string }[] = [
   { key: 'verb', label: '동사' },
@@ -50,6 +51,8 @@ export default function CreateWord() {
         <VerbForm />
       ) : pos === 'adj' ? (
         <AdjectiveForm />
+      ) : pos === 'noun' ? (
+        <NounForm />
       ) : (
         <View style={styles.card}>
           <Text style={styles.muted}>

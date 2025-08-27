@@ -8,15 +8,15 @@ type Options = {
 };
 
 export default function useNavigateToBlogView(options: Options = {}) {
-  const { routeName = 'blogview', idParamKey = 'id' } = options;
+  const { routeName = 'blogview', idParamKey = '_id' } = options;
 
   const navigation: any = useNavigation();
 
-  return (post: { id: string; [k: string]: any }) => {
+  return (post: { _id: string; [k: string]: any }) => {
     if (!navigation) return;
     navigation.navigate(
       routeName as never,
-      { [idParamKey]: post.id, post } as never,
+      { [idParamKey]: post._id, post } as never,
     );
   };
 }

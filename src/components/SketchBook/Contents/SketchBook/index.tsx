@@ -182,14 +182,31 @@ export default function SketchBook() {
                       // Android Shadow
                       elevation: 3,
                     }}>
-                    <Text
-                      style={{
-                        color: '#fff',
-                        fontSize: 16,
-                        fontWeight: '600',
-                      }}>
-                      {query} 그대로 사용하기
-                    </Text>
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={{
+                          color: '#fff',
+                          fontSize: 16,
+                          fontWeight: '600',
+                          flexShrink: 1, // 길면 줄어들게
+                          marginRight: 6, // "그대로 사용하기"랑 간격
+                          maxWidth: '30%',
+                        }}>
+                        {query}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: '800',
+                          color: '#fff',
+                          flexShrink: 0, // 무조건 보이게
+                        }}>
+                        그대로 사용하기
+                      </Text>
+                    </View>
                   </TouchableOpacity>
                 </>
               )}

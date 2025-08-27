@@ -10,12 +10,8 @@ import {
 import { styles } from './style';
 import useNavigateToBlogList from './hooks/useNavigateToBlogList';
 import useNavigateToBlogView from './hooks/useNavigateToBlogView';
-
-export type BlogPost = {
-  id: string;
-  title: string;
-  thumbnail?: any; // require(...) or { uri: string }
-};
+import { useBlogPosts } from './hooks/useBlogPosts';
+import { BlogPost } from './fetch/type';
 
 type Props = {
   posts?: BlogPost[];
@@ -26,21 +22,21 @@ type Props = {
   moreLabel?: string; // 기본: 더보기
 };
 
-const mockPosts: BlogPost[] = Array.from({ length: 5 }, (_, i) => ({
-  id: `post-${i + 1}`,
-  title: `블로그 글 제목 ${i + 1}`,
-  // thumbnail: require('../../images/sample-thumb.png'),
-}));
-
 export default function Blog({
-  posts = mockPosts,
   style,
   onPressMore,
   onPressPost,
   title = '인기 글',
   moreLabel = '더보기',
 }: Props) {
-  // 기본 동작: bloglist로 이동 (필요시 routeName/모드 변경 가능)
+  const { data, isLoading, isError, refetch } = useBlogPosts({
+    page: 1,
+    limit: 5,
+  });
+
+  const posts = data?.items ?? [];
+  const total = data?.totalCount ?? 0;
+
   const goBlogList = useNavigateToBlogList({
     routeName: 'bloglist',
     mode: 'navigate',
@@ -55,7 +51,7 @@ export default function Blog({
       onPress={() => (onPressPost ? onPressPost(item) : goBlogView(item))}>
       <View style={styles.thumbBox}>
         {item.thumbnail ? (
-          <Image source={item.thumbnail} style={styles.thumb} />
+          <Image source={{ uri: item?.thumbnail }} style={styles.thumb} />
         ) : (
           <View style={styles.thumbPlaceholder}>
             <Text style={styles.thumbPlaceholderText}>이미지가 없어요!</Text>
@@ -63,7 +59,7 @@ export default function Blog({
         )}
       </View>
       <Text style={styles.cardTitle} numberOfLines={2}>
-        {item.title}
+        {item.markdown_title}
       </Text>
     </TouchableOpacity>
   );
@@ -80,14 +76,30 @@ export default function Blog({
         </TouchableOpacity>
       </View>
 
-      {/* Horizontal list */}
-      <FlatList
+      {/* <FlatList
         data={posts}
         keyExtractor={item => item.id}
         renderItem={renderItem}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+      /> */}
+      <FlatList
+        data={posts}
+        keyExtractor={item => item._id}
+        renderItem={renderItem}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
+        refreshing={isLoading}
+        // onRefresh={refetch}
+        ListEmptyComponent={
+          isLoading ? null : (
+            <Text style={styles.more}>
+              {isError ? '불러오기 실패' : '게시글이 없어요'}
+            </Text>
+          )
+        }
       />
     </View>
   );

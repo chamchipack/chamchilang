@@ -8,8 +8,8 @@ export default function useNavigateToList({
 }: Params = {}) {
   const navigation = useNavigation();
 
-  const go = (q: string) => {
-    (navigation as any).navigate(targetRoute, { q }); // ← 캐스팅으로 에러 회피
+  const go = (query: string) => {
+    (navigation as any).navigate(targetRoute, { query }); // ← 캐스팅으로 에러 회피
   };
 
   return go;

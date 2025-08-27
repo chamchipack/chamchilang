@@ -16,7 +16,7 @@ import AdjectiveLogicChips from './AdjectiveLogicChips';
 import useVocaModal from './WordbookPicker/hooks/useVocaModal';
 import VocaModal from './WordbookPicker';
 
-export default function Information({ data = atsui }: { data?: Word }) {
+export default function Information({ data }: { data: Word }) {
   const voca = useVocaModal({
     // 필요시 서버 연동:
     // fetchWordbooks: async () => await api.wordbooks.list(),

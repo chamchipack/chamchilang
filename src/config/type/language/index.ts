@@ -11,7 +11,7 @@ import { NounWordSchema } from './pos/noun';
 
 /** ====== Base Word (공통 필드) ====== */
 export const BaseWordSchema = z.object({
-  id: z.string(),
+  _id: z.string(),
   language: z.literal('japanese'),
   jp: z.string(),
   kana: z.string(),

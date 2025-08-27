@@ -11,82 +11,23 @@ import { Bookmark, ChevronRight } from 'lucide-react-native';
 import { styles } from './style';
 import useNavigateToWordView from './hooks/useNavigateToWordView';
 import useBookmarkGuard from './hooks/useBookmarkGuard';
-
-export type WordItem = {
-  id: string;
-  word: string;
-  reading?: string;
-  meaning: string;
-  pos?: string;
-  jlpt?: 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
-  bookmarked?: boolean;
-};
+import { useWordList } from './hooks/useWordList';
+import { Word } from '../../../../config/type/language';
 
 type Props = {
   query?: string;
-  items?: WordItem[];
-  // (선택) 북마크 토글 콜백: 실제 토글 로직을 부모에서 주입하고 싶을 때
   onToggleBookmark?: (id: string) => void;
 };
 
-const MOCK_ITEMS: WordItem[] = [
-  {
-    id: '1',
-    word: '勉強',
-    reading: 'べんきょう',
-    meaning: '공부',
-    pos: '명사',
-    jlpt: 'N5',
-    bookmarked: false,
-  },
-  {
-    id: '2',
-    word: '食べる',
-    reading: 'たべる',
-    meaning: '먹다',
-    pos: '동사',
-    jlpt: 'N5',
-    bookmarked: true,
-  },
-  {
-    id: '3',
-    word: '面白い',
-    reading: 'おもしろい',
-    meaning: '재미있다',
-    pos: '형용사',
-    jlpt: 'N4',
-    bookmarked: false,
-  },
-  {
-    id: '4',
-    word: '会社',
-    reading: 'かいしゃ',
-    meaning: '회사',
-    pos: '명사',
-    jlpt: 'N4',
-    bookmarked: false,
-  },
-  {
-    id: '5',
-    word: '綺麗',
-    reading: 'きれい',
-    meaning: '예쁘다/깨끗하다',
-    pos: '형용동사',
-    jlpt: 'N3',
-    bookmarked: false,
-  },
-];
-
 export default function Contents({
   query = '검색어',
-  items = MOCK_ITEMS,
   onToggleBookmark,
 }: Props) {
   const goWordView = useNavigateToWordView();
   const guardBookmark = useBookmarkGuard(600);
 
-  const handleRowPress = (id: string) => {
-    goWordView(id);
+  const handleRowPress = (wordId: string) => {
+    goWordView(wordId);
   };
 
   const handleBookmarkPress = (e: GestureResponderEvent, id: string) => {
@@ -101,20 +42,28 @@ export default function Contents({
     });
   };
 
-  const renderItem = ({ item }: { item: WordItem }) => {
+  const { data, isLoading, isError, refetch } = useWordList({
+    page: 1,
+    limit: 5,
+    query: query,
+  });
+
+  const items = data?.items ?? [];
+
+  const renderItem = ({ item }: { item: Word }) => {
     return (
       <TouchableOpacity
         style={styles.item}
         activeOpacity={0.85}
-        onPress={() => handleRowPress(item.id)}>
+        onPress={() => handleRowPress(item._id)}>
         {/* 좌측 단어/읽기 */}
         <View style={styles.left}>
           <Text style={styles.word} numberOfLines={1}>
-            {item.word}
+            {item.jp}
           </Text>
-          {!!item.reading && (
+          {!!item.kana && (
             <Text style={styles.reading} numberOfLines={1}>
-              {item.reading}
+              {item.kana}
             </Text>
           )}
         </View>
@@ -122,14 +71,14 @@ export default function Contents({
         {/* 중앙 의미 + 배지 */}
         <View style={styles.middle}>
           <Text style={styles.meaning} numberOfLines={1}>
-            {item.meaning}
+            {item?.senses?.[0].meaning || ''}
           </Text>
           <View style={styles.badges}>
-            {!!item.pos && (
+            {/* {!!item.ro && (
               <View style={styles.badge}>
-                <Text style={styles.badgeText}>{item.pos}</Text>
+                <Text style={styles.badgeText}>{item.ro}</Text>
               </View>
-            )}
+            )} */}
             {!!item.jlpt && (
               <View style={[styles.badge, styles.badgeAccent]}>
                 <Text style={styles.badgeAccentText}>{item.jlpt}</Text>
@@ -140,14 +89,14 @@ export default function Contents({
 
         {/* 우측 액션 */}
         <View style={styles.right}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             activeOpacity={0.7}
-            onPress={e => handleBookmarkPress(e, item.id)}>
+            onPress={e => handleBookmarkPress(e, item._id)}>
             <Bookmark
               size={18}
-              color={item.bookmarked ? '#FFD166' : '#8E8E93'}
+              color={item?.bookmarked ? '#FFD166' : '#8E8E93'}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <ChevronRight size={18} color="#8E8E93" />
         </View>
       </TouchableOpacity>
@@ -177,7 +126,7 @@ export default function Contents({
       {ListHeader}
       <FlatList
         data={items}
-        keyExtractor={it => it.id}
+        keyExtractor={it => it._id}
         renderItem={renderItem}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         contentContainerStyle={

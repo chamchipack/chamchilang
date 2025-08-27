@@ -5,6 +5,7 @@ import List from '../Contents/List';
 import { styles } from './style';
 import useDebounced from './hooks/useDebounced';
 import useSearch from './hooks/useSearch';
+import { useRoute } from '@react-navigation/native';
 
 type WordListContainerProps = {
   defaultQuery?: string;
@@ -33,10 +34,13 @@ export function Chip({
 }
 
 export default function Container({
-  defaultQuery = 'asdfafs',
+  defaultQuery = '',
 }: WordListContainerProps) {
   // 입력/포커스 상태
-  const [query, setQuery] = useState(defaultQuery);
+  const route = useRoute();
+  const { query: q } = route.params as { query?: string };
+
+  const [query, setQuery] = useState(q || '');
   const [focused, setFocused] = useState(false);
 
   // 디바운스 검색
@@ -95,10 +99,6 @@ export default function Container({
 
   return (
     <>
-      {/* ⚠️ 현재 ./Contents/Input 이 제어형 props를 안 받는다면
-          props 추가 필요. 임시로 any 캐스팅 없이도 동작하도록
-          Input 컴포넌트가 value/onChangeText/onSubmitEditing/onFocus/loading
-          를 받게 수정하는걸 추천합니다. */}
       <Input
         {...({
           value: query,
@@ -109,7 +109,7 @@ export default function Container({
         } as any)}
       />
 
-      {focused ? Overlay : <List query={debounced} items={items} />}
+      {focused ? Overlay : <List query={query} />}
     </>
   );
 }
